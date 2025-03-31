@@ -69,4 +69,7 @@ export default defineNuxtConfig({
     prefix: "",
     componentDir: "app/components/ui",
   },
+  routeRules: {
+    "/api/**": { cors: true } // TODO add restrictive cors
+  }
 });

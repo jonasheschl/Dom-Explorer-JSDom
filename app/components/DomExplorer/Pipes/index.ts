@@ -7,6 +7,7 @@ import DomPurify from "./DomPurify/DomPurify.pipe.js";
 import HighlightJs from "./HighlightJs/HighlightJs.pipe.js";
 import JsXss from "./JsXss/JsXss.pipe.js";
 import Parse5 from "./Parse5/Parse5.pipe.js";
+import JSDom from "./JSDom/JSDom.pipe";
 import SafeValues from "./SafeValues/SafeValues.pipe.js";
 import SrcdocParser from "./SrcdocParser/SrcdocParser.pipe.js";
 import TemplateParser from "./TemplateParser/TemplateParser.pipe.js";
@@ -22,6 +23,7 @@ export const pipes = [
   HighlightJs,
   JsXss,
   Parse5,
+  JSDom,
   SafeValues,
   SrcdocParser,
   TemplateParser,
@@ -38,6 +40,7 @@ export const pipeParser = z
     HighlightJs.parser,
     JsXss.parser,
     Parse5.parser,
+    JSDom.parser,
     SafeValues.parser,
     SrcdocParser.parser,
     TemplateParser.parser,
