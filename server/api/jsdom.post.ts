@@ -1,4 +1,6 @@
-import { JSDOM } from "jsdom";
+import jsdom from "jsdom";
+
+const { JSDOM } = jsdom;
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);

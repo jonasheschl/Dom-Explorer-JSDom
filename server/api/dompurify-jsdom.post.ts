@@ -1,5 +1,7 @@
-import { JSDOM } from "jsdom";
-import { DOMPurify } from "dompurify";
+import jsdom from "jsdom";
+import DOMPurify from "dompurify";
+
+const { JSDOM } = jsdom;
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
