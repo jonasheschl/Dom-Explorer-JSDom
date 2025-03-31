@@ -47,7 +47,8 @@
     "vue": "^3.5.13",
     "vue-tsc": "^2.1.10",
     "wasm-pack": "^0.13.1",
-    "zod": "^3.24.1"
+    "zod": "^3.24.1",
+    "dompurify": "^3.2.3"
   },
   "module": "index.ts",
   "prettier": {

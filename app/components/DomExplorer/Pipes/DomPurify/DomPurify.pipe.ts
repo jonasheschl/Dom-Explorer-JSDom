@@ -13,11 +13,13 @@ const pipe = definePipe({
   opts: z
     .object({
       version: z.string().catch("latest"),
+      domBackend: z.string().catch("Browser"),
       options: z.string().catch("{}"),
       hooks: z.string().catch(hooksTemplate),
     })
     .catch(() => ({
       version: "latest",
+      domBackend: "Browser",
       options: "{}",
       hooks: hooksTemplate,
     })),

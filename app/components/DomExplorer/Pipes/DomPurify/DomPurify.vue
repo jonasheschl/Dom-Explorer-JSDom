@@ -23,6 +23,15 @@
           :choices="versions"
         />
       </PipeOption>
+      <PipeOption label="DomBackend">
+        <p>Choose the DOM backend to use with DOMPurify.</p>
+        <SearchInput
+          v-model="pipe.opts.domBackend"
+          :read-only="readOnly"
+          label="DomBackend"
+          :choices='["Browser", "JSDom"]'
+        />
+      </PipeOption>
       <PipeOption label="Options">
         <p>
           The options to pass to DOMPurify, this code will be passed to
@@ -87,19 +96,33 @@ const versions = usePackageVersions("dompurify");
 
 const sanitize = useSandbox(
   async (imp, opts: Opts, input: string, hooksTemplate: string) => {
-    const { default: DOMPurify } = await imp(
-      `https://cdn.jsdelivr.net/npm/dompurify@${opts.version}/+esm`,
-    );
-    const parsedOptions = opts.options.trim() ? eval(`(${opts.options})`) : {};
+    if (opts.domBackend === "Browser") {
+      const { default: DOMPurify } = await imp(
+        `https://cdn.jsdelivr.net/npm/dompurify@${opts.version}/+esm`,
+      );
+      const parsedOptions = opts.options.trim() ? eval(`(${opts.options})`) : {};
 
-    if (opts.hooks && opts.hooks !== hooksTemplate) {
-      const parsedHooks = opts.hooks.trim() ? eval(`(${opts.hooks})`) : {};
-      if (parsedHooks && typeof parsedHooks === "function") {
-        parsedHooks(DOMPurify);
+      if (opts.hooks && opts.hooks !== hooksTemplate) {
+        const parsedHooks = opts.hooks.trim() ? eval(`(${opts.hooks})`) : {};
+        if (parsedHooks && typeof parsedHooks === "function") {
+          parsedHooks(DOMPurify);
+        }
       }
-    }
 
-    return DOMPurify.sanitize(input, parsedOptions).toString();
+      return DOMPurify.sanitize(input, parsedOptions).toString();
+    } else if (opts.domBackend === "JSDom") {
+      // nuxt's $fetch is not available within the sandbox
+      const response = await fetch("./api/dompurify-jsdom", {
+        "method": "POST",
+        "body": JSON.stringify({
+          "dompurifyVersion": opts.version,
+          "html": input
+        })
+      });
+      const json = await response.json();
+
+      return json.html;
+    }
   },
   () => {},
 );
